@@ -5,24 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
 <meta name="apple-mobile-web-app-title" content="Mi Armario"/>
 <title>Mi Armario Inteligente</title>
 <style>
   :root { --bg: #f5f5f3; --surface: #fff; --border: #e0e0e0; --text: #1a1a1a; --muted: #777; --green: #2e7d32; --green-light: #e8f5e9; --green-border: #a5d6a7; --red: #c0392b; --accent: #1a1a1a; }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   body { font-family: -apple-system, system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
-
   .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 16px 10px; position: sticky; top: 0; z-index: 100; }
   .topbar h1 { font-size: 18px; font-weight: 600; }
   .topbar p { font-size: 12px; color: var(--muted); margin-top: 2px; }
-
   .tabs { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 57px; z-index: 99; }
-  .tab { flex: 1; padding: 12px 4px; border: none; background: transparent; font-size: 12px; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; }
+  .tab { flex: 1; padding: 12px 4px; border: none; background: transparent; font-size: 12px; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; }
   .tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
-
   .content { padding: 16px; max-width: 600px; margin: 0 auto; }
-
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; position: relative; }
   .card img { width: 100%; height: 150px; object-fit: cover; display: block; }
@@ -30,75 +25,60 @@
   .card .name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .card .cat { font-size: 11px; color: var(--muted); margin-top: 2px; }
   .del-btn { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.55); border: none; border-radius: 50%; width: 26px; height: 26px; cursor: pointer; color: #fff; font-size: 16px; line-height: 26px; text-align: center; }
-
   .form-group { margin-bottom: 16px; }
   label { font-size: 13px; color: var(--muted); display: block; margin-bottom: 6px; font-weight: 500; }
   input[type=text], select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 15px; background: var(--surface); color: var(--text); }
-  input[type=text]:focus, select:focus { outline: none; border-color: #999; }
-
   .photo-area { width: 100%; height: 180px; border: 2px dashed var(--border); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; color: var(--muted); font-size: 14px; gap: 8px; background: var(--surface); overflow: hidden; position: relative; }
   .photo-area img { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; }
   .photo-area input { position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
   .photo-icon { font-size: 36px; }
-
-  btn, .btn { display: inline-block; padding: 12px 20px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); font-size: 15px; cursor: pointer; font-weight: 500; width: 100%; text-align: center; }
+  .btn { display: block; padding: 12px 20px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); font-size: 15px; cursor: pointer; font-weight: 500; width: 100%; text-align: center; }
   .btn-dark { background: var(--accent); color: #fff; border-color: var(--accent); }
   .btn-green { background: var(--green); color: #fff; border-color: var(--green); }
-  .btn-sm { padding: 8px 14px; font-size: 13px; width: auto; }
-
-  .error { color: var(--red); font-size: 13px; margin-bottom: 12px; background: #fdf0f0; padding: 10px 12px; border-radius: 8px; }
-  .success { color: var(--green); font-size: 13px; margin-bottom: 12px; background: var(--green-light); padding: 10px 12px; border-radius: 8px; }
-
+  .btn-sm { padding: 8px 14px; font-size: 13px; width: auto; display: inline-block; }
+  .btn-red { background: var(--red); color: #fff; border-color: var(--red); }
+  .msg-box { font-size: 13px; margin-bottom: 12px; padding: 10px 12px; border-radius: 8px; display: none; }
+  .msg-error { background: #fdf0f0; color: var(--red); }
+  .msg-success { background: var(--green-light); color: var(--green); }
   .empty { text-align: center; padding: 3rem 1rem; color: var(--muted); }
   .empty-icon { font-size: 48px; margin-bottom: 12px; }
-
   .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
   .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px; text-align: center; }
   .stat-num { font-size: 20px; font-weight: 700; }
   .stat-label { font-size: 10px; color: var(--muted); margin-top: 2px; }
-
   .info-box { background: var(--green-light); border: 1px solid var(--green-border); border-radius: 10px; padding: 12px 14px; font-size: 13px; line-height: 1.8; margin-bottom: 16px; }
-  .info-box strong { color: var(--green); }
-
   .outfit-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
   .outfit-header { padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
   .outfit-title { font-size: 14px; font-weight: 600; }
-  .outfit-body { padding: 0 16px 14px; font-size: 13px; line-height: 1.8; color: #333; white-space: pre-wrap; border-top: 1px solid var(--border); padding-top: 12px; }
-
+  .outfit-body { padding: 12px 16px 14px; font-size: 13px; line-height: 1.8; color: #333; white-space: pre-wrap; border-top: 1px solid var(--border); }
   .loading { text-align: center; padding: 2rem; }
   .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
   @keyframes spin { to { transform: rotate(360deg); } }
-
   .api-section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 16px; }
   .api-section h3 { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
   .api-row { display: flex; gap: 8px; }
-  .api-row input { flex: 1; font-family: monospace; font-size: 12px; }
-
+  .api-row input { flex: 1; font-family: monospace; font-size: 12px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; }
   .occasion-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
   .occ-btn { padding: 10px 4px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); font-size: 12px; cursor: pointer; text-align: center; }
   .occ-btn.selected { background: var(--accent); color: #fff; border-color: var(--accent); }
-
   .danger-zone { background: #fff5f5; border: 1px solid #ffcccc; border-radius: 12px; padding: 14px; margin-top: 16px; }
   .danger-zone h3 { font-size: 14px; color: var(--red); margin-bottom: 8px; }
-  .btn-red { background: var(--red); color: #fff; border-color: var(--red); }
+  .vision-badge { display: inline-block; background: #e8f0fe; color: #1a73e8; font-size: 11px; padding: 2px 8px; border-radius: 20px; margin-left: 6px; font-weight: 600; }
 </style>
 </head>
 <body>
-
 <div class="topbar">
-  <h1>Mi Armario</h1>
-  <p>Powered by Gemini AI</p>
+  <h1>Mi Armario <span class="vision-badge">Vision IA</span></h1>
+  <p>Análisis visual real con Gemini</p>
 </div>
-
 <div class="tabs">
   <button class="tab active" onclick="switchTab('armario')">Armario</button>
   <button class="tab" onclick="switchTab('agregar')">+ Agregar</button>
   <button class="tab" onclick="switchTab('outfits')">Outfits IA</button>
   <button class="tab" onclick="switchTab('config')">Config</button>
 </div>
-
 <div class="content">
-  <div id="msg"></div>
+  <div id="msg" class="msg-box"></div>
 
   <!-- ARMARIO -->
   <div id="tab-armario">
@@ -106,9 +86,9 @@
     <div id="grid" class="grid"></div>
     <div id="empty-msg" class="empty" style="display:none">
       <div class="empty-icon">👗</div>
-      <p style="font-weight:600; margin-bottom:8px">Tu armario está vacío</p>
-      <p style="font-size:13px; margin-bottom:16px">Agrega tus prendas para comenzar</p>
-      <button class="btn btn-dark btn-sm" style="width:auto" onclick="switchTab('agregar')">Agregar primera prenda</button>
+      <p style="font-weight:600;margin-bottom:8px">Tu armario está vacío</p>
+      <p style="font-size:13px;margin-bottom:16px">Agrega tus prendas para comenzar</p>
+      <button class="btn btn-dark btn-sm" onclick="switchTab('agregar')">Agregar primera prenda</button>
     </div>
   </div>
 
@@ -116,7 +96,7 @@
   <div id="tab-agregar" style="display:none">
     <div class="form-group">
       <label>Foto de la prenda</label>
-      <div class="photo-area" id="photoArea">
+      <div class="photo-area">
         <input type="file" id="fileInput" accept="image/*" capture="environment" onchange="handleFile(event)"/>
         <div id="photoPlaceholder">
           <div class="photo-icon">📷</div>
@@ -150,44 +130,40 @@
 
   <!-- OUTFITS -->
   <div id="tab-outfits" style="display:none">
-    <div id="no-key-msg" class="info-box" style="display:none">
-      <strong>Configura tu API key primero</strong><br/>
-      Ve a la pestaña Config y pega tu API key de Gemini para activar los outfits con IA.
+    <div class="info-box">
+      Gemini analizará visualmente cada foto de tus prendas para sugerir combinaciones reales basadas en colores, texturas y estilos.
     </div>
-    <div id="outfits-main">
-      <p style="font-size:13px; font-weight:600; margin-bottom:10px">Ocasión</p>
-      <div class="occasion-grid">
-        <button class="occ-btn selected" onclick="selectOcc(this,'Casual')">Casual</button>
-        <button class="occ-btn" onclick="selectOcc(this,'Formal')">Formal</button>
-        <button class="occ-btn" onclick="selectOcc(this,'Trabajo')">Trabajo</button>
-        <button class="occ-btn" onclick="selectOcc(this,'Deportivo')">Deportivo</button>
-        <button class="occ-btn" onclick="selectOcc(this,'Salir')">Salir</button>
-        <button class="occ-btn" onclick="selectOcc(this,'Playa')">Playa</button>
-      </div>
-      <button class="btn btn-dark" id="genBtn" onclick="generateOutfits()" style="margin-bottom:16px">Generar outfits con IA</button>
-      <div id="loading" class="loading" style="display:none">
-        <div class="spinner"></div>
-        <p style="font-size:13px; color:var(--muted)">Analizando tu armario...</p>
-      </div>
-      <div id="outfits-list"></div>
+    <p style="font-size:13px;font-weight:600;margin-bottom:10px">Ocasión</p>
+    <div class="occasion-grid">
+      <button class="occ-btn selected" onclick="selectOcc(this,'Casual')">Casual</button>
+      <button class="occ-btn" onclick="selectOcc(this,'Formal')">Formal</button>
+      <button class="occ-btn" onclick="selectOcc(this,'Trabajo')">Trabajo</button>
+      <button class="occ-btn" onclick="selectOcc(this,'Deportivo')">Deportivo</button>
+      <button class="occ-btn" onclick="selectOcc(this,'Salir')">Salir</button>
+      <button class="occ-btn" onclick="selectOcc(this,'Playa')">Playa</button>
     </div>
+    <button class="btn btn-dark" id="genBtn" onclick="generateOutfits()" style="margin-bottom:16px">Analizar prendas y generar outfits</button>
+    <div id="loading" class="loading" style="display:none">
+      <div class="spinner"></div>
+      <p style="font-size:13px;color:var(--muted)">Gemini está analizando tus prendas visualmente...</p>
+    </div>
+    <div id="outfits-list"></div>
   </div>
 
   <!-- CONFIG -->
   <div id="tab-config" style="display:none">
     <div class="api-section">
       <h3>API Key de Gemini</h3>
-      <p style="font-size:12px; color:var(--muted); margin-bottom:10px">Obtén tu key gratis en aistudio.google.com</p>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px">Obtén tu key gratis en aistudio.google.com</p>
       <div class="api-row">
         <input type="password" id="apiKeyInput" placeholder="AIza..."/>
         <button class="btn btn-dark btn-sm" onclick="saveApiKey()">Guardar</button>
       </div>
-      <p id="apiStatus" style="font-size:12px; color:var(--green); margin-top:8px"></p>
+      <p id="apiStatus" style="font-size:12px;color:var(--green);margin-top:8px"></p>
     </div>
-
     <div class="danger-zone">
       <h3>Borrar armario</h3>
-      <p style="font-size:12px; color:var(--muted); margin-bottom:10px">Esto eliminará todas tus prendas permanentemente.</p>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px">Elimina todas tus prendas permanentemente.</p>
       <button class="btn btn-red btn-sm" onclick="clearWardrobe()">Borrar todo</button>
     </div>
   </div>
@@ -205,10 +181,10 @@ function getApiKey() { return localStorage.getItem(API_KEY_STORAGE) || ""; }
 
 function showMsg(msg, type) {
   const el = document.getElementById("msg");
-  el.className = type === "error" ? "error" : "success";
+  el.className = "msg-box " + (type === "error" ? "msg-error" : "msg-success");
   el.textContent = msg;
   el.style.display = msg ? "block" : "none";
-  if (msg) setTimeout(() => el.style.display = "none", 3000);
+  if (msg) setTimeout(() => el.style.display = "none", 3500);
 }
 
 function saveApiKey() {
@@ -226,13 +202,8 @@ function switchTab(name) {
   document.querySelectorAll(".tab").forEach((btn, i) => {
     btn.classList.toggle("active", ["armario","agregar","outfits","config"][i] === name);
   });
-  showMsg("", "");
+  showMsg("","");
   if (name === "armario") renderGrid();
-  if (name === "outfits") {
-    const hasKey = !!getApiKey();
-    document.getElementById("no-key-msg").style.display = hasKey ? "none" : "block";
-    document.getElementById("outfits-main").style.opacity = hasKey ? "1" : "0.5";
-  }
   if (name === "config") {
     const k = getApiKey();
     if (k) { document.getElementById("apiKeyInput").value = k; document.getElementById("apiStatus").textContent = "API key guardada"; }
@@ -241,8 +212,8 @@ function switchTab(name) {
 
 function renderStats() {
   const cats = {};
-  clothes.forEach(c => cats[c.category] = (cats[c.category] || 0) + 1);
-  const top = Object.entries(cats).sort((a,b) => b[1]-a[1]).slice(0,2);
+  clothes.forEach(c => cats[c.category] = (cats[c.category]||0)+1);
+  const top = Object.entries(cats).sort((a,b)=>b[1]-a[1]).slice(0,2);
   const stats = document.getElementById("stats");
   if (!clothes.length) { stats.innerHTML = ""; return; }
   stats.innerHTML = `<div class="stat"><div class="stat-num">${clothes.length}</div><div class="stat-label">prendas</div></div>` +
@@ -308,7 +279,7 @@ function deleteClothing(i) {
 }
 
 function clearWardrobe() {
-  if (!confirm("¿Borrar todas las prendas? Esto no se puede deshacer.")) return;
+  if (!confirm("¿Borrar todas las prendas? No se puede deshacer.")) return;
   clothes = [];
   save();
   renderGrid();
@@ -321,29 +292,46 @@ function selectOcc(btn, val) {
   selectedOccasion = val;
 }
 
+function urlToBase64(dataUrl) {
+  return dataUrl.split(",")[1];
+}
+
+function getMimeType(dataUrl) {
+  const match = dataUrl.match(/^data:([^;]+);/);
+  return match ? match[1] : "image/jpeg";
+}
+
 async function generateOutfits() {
-  if (!getApiKey()) { showMsg("Configura tu API key primero en Config", "error"); return; }
+  if (!getApiKey()) { showMsg("Configura tu API key en Config primero", "error"); return; }
   if (clothes.length < 2) { showMsg("Necesitas al menos 2 prendas en tu armario", "error"); return; }
 
   document.getElementById("loading").style.display = "block";
   document.getElementById("outfits-list").innerHTML = "";
   document.getElementById("genBtn").disabled = true;
 
-  const wardrobe = clothes.map(c => `- ${c.name} (${c.category}${c.color?", "+c.color:""}${c.notes?", "+c.notes:""})`).join("\n");
-  const prompt = `Eres un estilista experto. El usuario tiene este armario:\n${wardrobe}\n\nOcasión: ${selectedOccasion}\n\nSugiere 3 outfits completos y creativos usando solo prendas del armario. Para cada outfit:\n1. Título creativo\n2. Prendas que lo componen\n3. Consejo de estilo visual específico\n\nSé específico y entusiasta.`;
+  // Build parts: text + one image per prenda
+  const parts = [];
+  parts.push({ text: `Eres un estilista experto con visión. Analiza visualmente estas ${clothes.length} prendas y sugiere 3 outfits completos y creativos para ocasión: ${selectedOccasion}.\n\nPrendas del armario:` });
+
+  clothes.forEach((c, i) => {
+    parts.push({ text: `\nPrenda ${i+1}: ${c.name} (${c.category}${c.color?", "+c.color:""}${c.notes?", "+c.notes:""})` });
+    parts.push({ inline_data: { mime_type: getMimeType(c.url), data: urlToBase64(c.url) } });
+  });
+
+  parts.push({ text: `\nBásate en lo que ves en las fotos: colores reales, texturas, estilos y cortes. Para cada outfit:\n1. Título creativo\n2. Prendas que lo componen\n3. Consejo de estilo basado en lo que ves visualmente\n\nSé específico sobre los colores y texturas que observas en las imágenes.` });
 
   try {
     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${getApiKey()}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+      body: JSON.stringify({ contents: [{ parts }] })
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error.message);
     const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "No se generaron outfits.";
-    const parts = text.split(/\n(?=(?:\*\*)?(?:Outfit\s+)?\d+[\.\-\*])/i).filter(p => p.trim().length > 20);
-    const outfits = parts.length > 1 ? parts : [text];
-    document.getElementById("outfits-list").innerHTML = outfits.map((o,i) => `
+    const outfits = text.split(/\n(?=(?:\*\*)?(?:Outfit\s+)?\d+[\.\-\*])/i).filter(p => p.trim().length > 20);
+    const list = outfits.length > 1 ? outfits : [text];
+    document.getElementById("outfits-list").innerHTML = list.map((o,i) => `
       <div class="outfit-card">
         <div class="outfit-header" onclick="toggleOutfit(${i})">
           <span class="outfit-title">Outfit ${i+1}</span>
