@@ -270,17 +270,18 @@ function addClothing() {
   document.getElementById("clotheName").value = "";
   document.getElementById("clotheColor").value = "";
   document.getElementById("clotheNotes").value = "";
-  // Reset input file
+  // Reset foto
+  pendingUrl = "";
   const photoArea = document.querySelector(".photo-area");
   photoArea.innerHTML = `
     <input type="file" id="fileInput" accept="image/*" capture="environment"/>
-    <div id="photoPlaceholder">
+    <div id="photoPlaceholder" style="display:flex;flex-direction:column;align-items:center;gap:8px">
       <div class="photo-icon">📷</div>
       <span>Toca para tomar foto o seleccionar</span>
     </div>
-    <img id="preview" style="display:none"/>
+    <img id="preview" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0"/>
   `;
-  bindFileInput();
+  document.getElementById("fileInput").addEventListener("change", handleFile);
   showMsg(`"${name}" agregada al armario`, "success");
 }
 
