@@ -204,8 +204,8 @@ function switchTab(name) {
   });
   showMsg("","");
   if (name === "armario") renderGrid();
-bindFileInput();
-  if (name === "config") {
+renderForm();
+  if (name === "agregar") renderForm();
     const k = getApiKey();
     if (k) { document.getElementById("apiKeyInput").value = k; document.getElementById("apiStatus").textContent = "API key guardada"; }
   }
@@ -252,9 +252,43 @@ function handleFile(e) {
   reader.readAsDataURL(f);
 }
 
-function bindFileInput() {
-  const input = document.getElementById("fileInput");
-  input.addEventListener("change", handleFile);
+function renderForm() {
+  document.getElementById("form-agregar").innerHTML = `
+    <div class="form-group">
+      <label>Foto de la prenda</label>
+      <div class="photo-area" id="photoArea">
+        <input type="file" id="fileInput" accept="image/*"/>
+        <div id="photoPlaceholder" style="display:flex;flex-direction:column;align-items:center;gap:8px">
+          <div class="photo-icon">📷</div>
+          <span>Toca para seleccionar foto</span>
+        </div>
+        <img id="preview" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Nombre de la prenda</label>
+      <input type="text" id="clotheName" placeholder="Ej: Camisa blanca de lino"/>
+    </div>
+    <div class="form-group">
+      <label>Categoría</label>
+      <select id="clotheCat">
+        <option>Camisas</option><option>Pantalones</option><option>Vestidos</option>
+        <option>Zapatos</option><option>Accesorios</option><option>Abrigos</option>
+        <option>Ropa deportiva</option><option>Otro</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Color principal</label>
+      <input type="text" id="clotheColor" placeholder="Ej: Azul marino"/>
+    </div>
+    <div class="form-group">
+      <label>Notas (opcional)</label>
+      <input type="text" id="clotheNotes" placeholder="Ej: Favorita, talla M"/>
+    </div>
+    <button class="btn btn-dark" onclick="addClothing()">Guardar prenda</button>
+  `;
+  pendingUrl = "";
+  document.getElementById("fileInput").addEventListener("change", handleFile);
 }
 
 function addClothing() {
