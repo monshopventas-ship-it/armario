@@ -204,7 +204,6 @@ function switchTab(name) {
   });
   showMsg("","");
   if (name === "armario") renderGrid();
-renderForm();
   if (name === "agregar") renderForm();
     const k = getApiKey();
     if (k) { document.getElementById("apiKeyInput").value = k; document.getElementById("apiStatus").textContent = "API key guardada"; }
