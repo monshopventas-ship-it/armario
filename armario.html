@@ -97,7 +97,7 @@
     <div class="form-group">
       <label>Foto de la prenda</label>
       <div class="photo-area">
-        <input type="file" id="fileInput" accept="image/*" capture="environment" onchange="handleFile(event)"/>
+        <input type="file" id="fileInput" accept="image/*" capture="environment"/>
         <div id="photoPlaceholder">
           <div class="photo-icon">📷</div>
           <span>Toca para tomar foto o seleccionar</span>
@@ -204,6 +204,7 @@ function switchTab(name) {
   });
   showMsg("","");
   if (name === "armario") renderGrid();
+bindFileInput();
   if (name === "config") {
     const k = getApiKey();
     if (k) { document.getElementById("apiKeyInput").value = k; document.getElementById("apiStatus").textContent = "API key guardada"; }
@@ -251,6 +252,11 @@ function handleFile(e) {
   reader.readAsDataURL(f);
 }
 
+function bindFileInput() {
+  const input = document.getElementById("fileInput");
+  input.addEventListener("change", handleFile);
+}
+
 function addClothing() {
   const name = document.getElementById("clotheName").value.trim();
   const category = document.getElementById("clotheCat").value;
@@ -264,13 +270,17 @@ function addClothing() {
   document.getElementById("clotheName").value = "";
   document.getElementById("clotheColor").value = "";
   document.getElementById("clotheNotes").value = "";
-  // Reset input file completamente
-  const oldInput = document.getElementById("fileInput");
-  const newInput = oldInput.cloneNode(true);
-  newInput.addEventListener("change", handleFile);
-  oldInput.parentNode.replaceChild(newInput, oldInput);
-  document.getElementById("preview").style.display = "none";
-  document.getElementById("photoPlaceholder").style.display = "flex";
+  // Reset input file
+  const photoArea = document.querySelector(".photo-area");
+  photoArea.innerHTML = `
+    <input type="file" id="fileInput" accept="image/*" capture="environment"/>
+    <div id="photoPlaceholder">
+      <div class="photo-icon">📷</div>
+      <span>Toca para tomar foto o seleccionar</span>
+    </div>
+    <img id="preview" style="display:none"/>
+  `;
+  bindFileInput();
   showMsg(`"${name}" agregada al armario`, "success");
   switchTab("armario");
 }
