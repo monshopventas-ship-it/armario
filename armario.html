@@ -264,7 +264,11 @@ function addClothing() {
   document.getElementById("clotheName").value = "";
   document.getElementById("clotheColor").value = "";
   document.getElementById("clotheNotes").value = "";
-  document.getElementById("fileInput").value = "";
+  // Reset input file completamente
+  const oldInput = document.getElementById("fileInput");
+  const newInput = oldInput.cloneNode(true);
+  newInput.addEventListener("change", handleFile);
+  oldInput.parentNode.replaceChild(newInput, oldInput);
   document.getElementById("preview").style.display = "none";
   document.getElementById("photoPlaceholder").style.display = "flex";
   showMsg(`"${name}" agregada al armario`, "success");
